@@ -1,41 +1,26 @@
+import PreloadScene from "./scenes/preload.js";
+import GameScene from "./scenes/game.js";
+import GameOverScene from "./scenes/gameover.js";
+
+// 画面サイズ
 const D_WIDTH = 480;
 const D_HEIGHT = 320;
 
-// 1, Phaser3の設定データ
+// Phaser3の設定
 const config = {
-	type: Phaser.AUTO,
-	width: D_WIDTH,// ゲーム画面の横幅
-	height: D_HEIGHT,// ゲーム画面の高さ
-	antialias: false,
-	scene: {
-		preload: preload,// 素材の読み込み時の関数
-		create: create,// 画面が作られた時の関数
-		update: update// 連続実行される関数
-	},
-	fps: {
-		target: 24,// フレームレート
-		forceSetTimeOut: true
-	},
-	physics: {
-		default: "arcade",
-		arcade: {
-			debug: true,// スプライトに緑の枠を表示します
-			gravity: {y: 300}// 重力の方向とその強さ
-		}
-	}
-}
+    type: Phaser.AUTO,
+    width: D_WIDTH,
+    height: D_HEIGHT,
+    antialias: false,
+    physics: {
+        default: "arcade",
+        arcade: {
+            debug: false,
+            gravity: { y: 300 }
+        }
+    },
+    scene: [PreloadScene, GameScene, GameOverScene]
+};
 
-// 2, Phaser3オブジェクトを作る
-let phaser = new Phaser.Game(config);
-
-function preload(){
-	console.log("preload!!");
-}
-
-function create(){
-	console.log("create!!");
-}
-
-function update(){
-	console.log("update!!");
-}
+// Phaserゲームの作成
+let game = new Phaser.Game(config);
