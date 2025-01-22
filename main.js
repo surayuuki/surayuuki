@@ -3,24 +3,23 @@ import GameScene from "./scenes/game.js";
 import GameOverScene from "./scenes/gameover.js";
 
 // 画面サイズ
-const D_WIDTH = 480;
-const D_HEIGHT = 320;
+const D_WIDTH = 800;
+const D_HEIGHT = 600;
 
-// Phaser3の設定
+// Phaserの設定
 const config = {
     type: Phaser.AUTO,
     width: D_WIDTH,
     height: D_HEIGHT,
-    antialias: false,
     physics: {
         default: "arcade",
         arcade: {
             debug: false,
-            gravity: { y: 300 }
+            gravity: { y: 0 }  // 重力なし（キャラが落ちないようにする）
         }
     },
     scene: [PreloadScene, GameScene, GameOverScene]
 };
 
-// Phaserゲームの作成
+// ゲーム開始
 let game = new Phaser.Game(config);
