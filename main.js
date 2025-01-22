@@ -11,6 +11,7 @@ const config = {
     type: Phaser.AUTO,
     width: D_WIDTH,
     height: D_HEIGHT,
+    parent: "game-container", // 🔹 ここにキャンバスを配置
     physics: {
         default: "arcade",
         arcade: {

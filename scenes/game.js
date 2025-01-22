@@ -6,32 +6,37 @@ export default class GameScene extends Phaser.Scene {
 
     create() {
         console.log("🎮 Creating GameScene...");
-        
-        // **背景画像の追加**
-        this.add.image(400, 300, "field");
-    
-        // **スコア表示**
+
+        // **🔹 背景画像の追加（最背面に配置）**
+        // **背景画像の追加（タイル化）**
+        this.background = this.add.tileSprite(400, 300, 800, 600, "field");
+
+        // update内でtilePositionを固定
+        this.background.tilePositionX = 0;
+        this.background.tilePositionY = 0;
+
+        // **🔹 スコア表示**
         this.scoreText = this.add.text(10, 10, "Score: 0", { fontSize: "16px", fill: "#fff" });
-    
-        // **プレイヤー作成**
+
+        // **🔹 プレイヤー作成**
         this.player = this.physics.add.sprite(400, 300, "player", 0); // フレーム0を指定
         if (!this.player) {
             console.error("❌ Error: Player not created!");
             return;
         }
         this.player.setCollideWorldBounds(true);
-        this.player.setAlpha(1); 
-        this.player.setVisible(true); 
-        console.log("✅ Player object:", this.player);    
+        this.player.setAlpha(1);
+        this.player.setVisible(true);
+        console.log("✅ Player object:", this.player);
 
-        // **敵キャラのグループ**
+        // **🔹 敵キャラのグループ**
         this.enemies = this.physics.add.group();
         for (let i = 0; i < 5; i++) {
             let x, y;
             do {
                 x = Phaser.Math.Between(50, 750);
                 y = Phaser.Math.Between(50, 550);
-            } while (Phaser.Math.Distance.Between(x, y, this.player.x, this.player.y) < 100);  // **プレイヤーと100px以上離す**
+            } while (Phaser.Math.Distance.Between(x, y, this.player.x, this.player.y) < 100);  
 
             let enemy = this.enemies.create(x, y, "enemy");
             enemy.setCollideWorldBounds(true);
@@ -39,26 +44,26 @@ export default class GameScene extends Phaser.Scene {
         }
         console.log("✅ Enemies created:", this.enemies.getChildren().length);
 
-        // **剣の作成**
+        // **🔹 剣の作成**
         this.sword = this.physics.add.sprite(this.player.x, this.player.y, "sword");
         this.sword.setSize(32, 32);
         this.sword.setVisible(false);
         this.sword.disableBody(true, true);
 
-        // **プレイヤーと敵の衝突（ゲームオーバー）**
+        // **🔹 プレイヤーと敵の衝突（ゲームオーバー）**
         this.physics.add.overlap(this.player, this.enemies, () => {
             console.warn("❌ Game Over! Player collided with enemy.");
             this.scene.start("GameOverScene");
         }, null, this);
 
-        // **剣が敵に当たると敵を倒す**
+        // **🔹 剣が敵に当たると敵を倒す**
         this.physics.add.overlap(this.sword, this.enemies, this.hitEnemy, null, this);
 
-        // **入力処理**
+        // **🔹 入力処理**
         this.cursors = this.input.keyboard.createCursorKeys();
         this.attackKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
-        // **敵のランダム移動**
+        // **🔹 敵のランダム移動**
         this.time.addEvent({
             delay: 3000,
             callback: this.changeEnemyDirection,
@@ -97,20 +102,18 @@ export default class GameScene extends Phaser.Scene {
             this.player.anims.stop();
         }
 
-        // **スペースキーで攻撃**
+        // **🔹 スペースキーで攻撃**
         if (Phaser.Input.Keyboard.JustDown(this.attackKey)) {
             this.attack();
         }
 
-        // **敵の動作（ランダム移動 or 追尾）**
+        // **🔹 敵の動作（ランダム移動 or 追尾）**
         this.enemies.children.iterate((enemy) => {
             let distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, enemy.x, enemy.y);
 
             if (distance < 150) {
-                // **150px以内に来たらプレイヤーを追尾**
                 this.physics.moveToObject(enemy, this.player, 70);
             } else {
-                // **ランダム移動**
                 switch (enemy.direction) {
                     case 0: enemy.setVelocityX(50); break;
                     case 1: enemy.setVelocityX(-50); break;
@@ -121,19 +124,18 @@ export default class GameScene extends Phaser.Scene {
         });
     }
 
-    // **剣で敵を倒す**
+    // **🔹 剣で敵を倒す**
     hitEnemy(sword, enemy) {
         enemy.setActive(false).setVisible(false);
         this.score += 10;
         this.scoreText.setText(`Score: ${this.score}`);
 
-        // **一定スコアでレベルアップ**
         if (this.score % 50 === 0) {
             this.levelUp();
         }
     }
 
-    // **剣を振る処理**
+    // **🔹 剣を振る処理**
     attack() {
         this.sword.enableBody(true, this.player.x, this.player.y, true, true);
         this.sword.setVisible(true);
@@ -145,14 +147,14 @@ export default class GameScene extends Phaser.Scene {
         });
     }
 
-    // **敵のランダム移動方向を変更**
+    // **🔹 敵のランダム移動方向を変更**
     changeEnemyDirection() {
         this.enemies.children.iterate((enemy) => {
             enemy.direction = Phaser.Math.Between(0, 3);
         });
     }
 
-    // **レベルアップ処理**
+    // **🔹 レベルアップ処理**
     levelUp() {
         for (let i = 0; i < 3; i++) {
             let x = Phaser.Math.Between(50, 750);

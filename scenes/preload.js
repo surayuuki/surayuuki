@@ -7,6 +7,7 @@ export default class PreloadScene extends Phaser.Scene {
         console.log("🔹 Preloading assets...");
 
         // **アセットのロード**
+        this.load.image("field", "assets/field.png");  // 🔹 背景画像を追加
         this.load.spritesheet("player", "assets/player.png", { frameWidth: 32, frameHeight: 32 });
         this.load.spritesheet("enemy", "assets/enemy.png", { frameWidth: 32, frameHeight: 32 });
         this.load.image("sword", "assets/sword.png");
@@ -14,6 +15,7 @@ export default class PreloadScene extends Phaser.Scene {
         // **デバッグ用ログ**
         this.load.on("complete", () => {
             console.log("✅ All assets loaded!");
+            console.log("Field loaded:", this.textures.exists("field"));
             console.log("Player loaded:", this.textures.exists("player"));
             console.log("Enemy loaded:", this.textures.exists("enemy"));
             console.log("Sword loaded:", this.textures.exists("sword"));
