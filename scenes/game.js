@@ -7,9 +7,12 @@ export default class GameScene extends Phaser.Scene {
     create() {
         console.log("🎮 Creating GameScene...");
         
+        // **背景画像の追加**
+        this.add.image(400, 300, "field");
+    
         // **スコア表示**
         this.scoreText = this.add.text(10, 10, "Score: 0", { fontSize: "16px", fill: "#fff" });
-
+    
         // **プレイヤー作成**
         this.player = this.physics.add.sprite(400, 300, "player", 0); // フレーム0を指定
         if (!this.player) {
@@ -17,9 +20,9 @@ export default class GameScene extends Phaser.Scene {
             return;
         }
         this.player.setCollideWorldBounds(true);
-        this.player.setAlpha(1); // 🔹 透明度チェック
-        this.player.setVisible(true); // 🔹 確実に可視化
-        console.log("✅ Player object:", this.player);
+        this.player.setAlpha(1); 
+        this.player.setVisible(true); 
+        console.log("✅ Player object:", this.player);    
 
         // **敵キャラのグループ**
         this.enemies = this.physics.add.group();
