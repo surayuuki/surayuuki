@@ -2,24 +2,24 @@ import PreloadScene from "./scenes/preload.js";
 import GameScene from "./scenes/game.js";
 import GameOverScene from "./scenes/gameover.js";
 
-// 画面サイズ
-const D_WIDTH = 800;
-const D_HEIGHT = 600;
-
 // Phaserの設定
 const config = {
-    type: Phaser.AUTO,
-    width: D_WIDTH,
-    height: D_HEIGHT,
-    parent: "game-container", // 🔹 ここにキャンバスを配置
+    type: Phaser.AUTO,  // 🔹 WebGL or Canvas を自動選択
+    width: 800,  // 🔹 固定サイズ
+    height: 600,
+    parent: "game-container",  // 🔹 ゲームキャンバスの親要素
     physics: {
         default: "arcade",
         arcade: {
             debug: false,
-            gravity: { y: 0 }  // 重力なし（キャラが落ちないようにする）
+            gravity: { y: 0 }
         }
     },
-    scene: [PreloadScene, GameScene, GameOverScene]
+    scene: [PreloadScene, GameScene, GameOverScene],
+    scale: {
+        mode: Phaser.Scale.NONE,  // 🔹 サイズ固定で拡大縮小しない
+        autoCenter: Phaser.Scale.CENTER_BOTH
+    }
 };
 
 // ゲーム開始
